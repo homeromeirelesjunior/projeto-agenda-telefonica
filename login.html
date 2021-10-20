@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/login.css">
+    <title>Bem vindo à sua Agenda Telefônica!!!</title>
+    <script src="/js/lib/jquery/jquery-2.1.3.js"></script>
+    <script>
+        $(function () {
+            $('#login').on('click', function (e) {
+                const user = $('#email').val()
+                const password = $('#password').val()
+
+                $.post('/login', {usuario: user, senha: password}, function (data) {
+                    console.log(data)
+
+                    if (data === 'OK') {
+                        document.location.reload()
+                    }
+                })
+            })
+        })
+    </script>
+</head>
+<body>   
+    <div class="login">
+        <h1>Login Agenda Telefônica</h1>
+        <form method="post" action="">
+            <p><input id="email" type="text" name="login" value="" placeholder="Email"></p>
+            <p><input id="password" type="password" name="password" value="" placeholder="Senha"></p>
+            <p class="submit"><button type="button" id="login">Entrar</button></p>          
+        </form>
+    </div>
+    
+    <div class="login-help">
+        <p>Esqueceu sua senha? <a href="#">Clique aqui para recuperá-la</a>.</p>
+    </div>  
+</body>
+</html>

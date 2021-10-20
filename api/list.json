@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1,
+    "firstName": "Nicole",
+    "phone": "16 91234456",
+    "address": "Rua dos Tupis 1060 Jardim Martins",
+    "email": "nicole@gmail.com"
+  },
+  {
+    "id": 2,
+    "firstName": "Zancan",
+    "phone": "35 999998888",
+    "address": "Avenida das Acacias 1120 Jardim do Lar",
+    "email": "zancan@gmail.com"
+  },  
+  {
+    "id": 3,
+    "firstName": "Homero",
+    "phone": "45 923454567",
+    "address": "Rua do Prado 2020 Jardim Oliveira",
+    "email": "edson@gmail.com"
+  },
+  {
+    "id": 4,
+    "firstName": "José",
+    "phone": "16 923454578",
+    "address": "Rua dos Coqueiros 680 Vila Nova",
+    "email": "fernando@gmail.com"
+  }
+]
