@@ -2,16 +2,16 @@ var persons = [];
 var editId;
 
 const API = {
-    CREATE: "./api/add.json",
+    CREATE: "./person",
     READ: "./api/list.json",
-    UPDATE: "./api/update.json",
-    DELETE: "./api/delete.json"
+    UPDATE: "./person",
+    DELETE: "./person"
 };
 const ACTION_METHODS = {
-    CREATE: "GET",
+    CREATE: "POST",
     READ: "GET",
-    UPDATE: "GET",
-    DELETE: "GET"
+    UPDATE: "PUT",
+    DELETE: "DELETE"
 };
 
 window.PhoneBook = {
@@ -39,45 +39,42 @@ window.PhoneBook = {
         });
     },
 
-    // delete: function(id) {
-    //     $.ajax({
-    //         url: API.DELETE,
-    //         method: ACTION_METHODS.DELETE,
-    //         data: {
-    //             id: id
-    //         }
-    //     }).done(function (response) {
-    //         if (response.success) {
-    //             PhoneBookLocalActions.delete(id);
-    //         }
-    //     });
-    // },
+    delete: function(id) {
+        $.ajax({
+            url: API.DELETE + `?id=${id}`,
+            method: ACTION_METHODS.DELETE
+        }).done(function (response) {
+            if (response.success) {
+                PhoneBookLocalActions.delete(id);
+            }
+        });
+    },
 
-    // add: function(person) {
-    //     $.ajax({
-    //         url: API.CREATE,
-    //         method: ACTION_METHODS.CREATE,
-    //         data: person
-    //     }).done(function (response) {
-    //         if (response.success) {
-    //             PhoneBook.cancelEdit();
-    //             PhoneBookLocalActions.add(person);
-    //         }
-    //     });
-    // },
+    add: function(person) {
+        $.ajax({
+            url: API.CREATE,
+            method: ACTION_METHODS.CREATE,
+            data: person
+        }).done(function (response) {
+            if (response.success) {
+                PhoneBook.cancelEdit();
+                PhoneBookLocalActions.add(person);
+            }
+        });
+    },
 
-    // update: function(person) {
-    //     $.ajax({
-    //         url: API.UPDATE,
-    //         method: ACTION_METHODS.UPDATE,
-    //         data: person
-    //     }).done(function (response) {
-    //         if (response.success) {
-    //             PhoneBook.cancelEdit();
-    //             PhoneBookLocalActions.update(person);
-    //         }
-    //     });
-    // },
+    update: function(person) {
+        $.ajax({
+            url: API.UPDATE,
+            method: ACTION_METHODS.UPDATE,
+            data: person
+        }).done(function (response) {
+            if (response.success) {
+                PhoneBook.cancelEdit();
+                PhoneBookLocalActions.update(person);
+            }
+        });
+    },
 
     bindEvents: function() {
         $('#phone-book tbody').delegate('a.edit', 'click', function () {
@@ -93,9 +90,9 @@ window.PhoneBook = {
 
         $(".add-form").submit(function() {
             const person = {
-                firstName: $('input[name=firstName]').val(),
+                name: $('input[name=name]').val(),
                 phone: $('input[name=phone]').val(),
-                adress: $('input[name=adress]').val(),
+                address: $('input[name=address]').val(),
                 email: $('input[name=email]').val()
             };
 
@@ -119,14 +116,13 @@ window.PhoneBook = {
 
     startEdit: function (id) {
         var editPerson = persons.find(function (person) {
-            console.log(person.firstName);
             return person.id == id;
         });
         console.debug('startEdit', editPerson);
 
-        $('input[name=firstName]').val(editPerson.firstName);
+        $('input[name=name]').val(editPerson.name);
         $('input[name=phone]').val(editPerson.phone);
-        $('input[name=adress]').val(editPerson.adress);
+        $('input[name=address]').val(editPerson.address);
         $('input[name=email]').val(editPerson.email);
         editId = id;
     },
@@ -148,7 +144,7 @@ window.PhoneBook = {
         value = value.toLowerCase();
         
         var filtered = persons.filter(function (person) {
-            return person.firstName.toLowerCase().includes(value) ||
+            return person.name.toLowerCase().includes(value) ||
                 person.phone.toLowerCase().includes(value);
         });
     
@@ -175,9 +171,9 @@ window.PhoneBookLocalActions = {
     update: person => {
         const id = person.id;
         var personToUpdate = persons.find(person => person.id === id);
-        personToUpdate.firstName = person.firstName;
+        personToUpdate.name = person.name;
         personToUpdate.phone = person.phone;
-        personToUpdate.adress = person.adress;
+        personToUpdate.address = person.address;
         personToUpdate.email = person.email;
         PhoneBook.display(persons);
     }

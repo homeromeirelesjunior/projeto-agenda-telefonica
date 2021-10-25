@@ -41,7 +41,7 @@ router.get('/', (req, res) => {
 
 router.get('/logout', (req, res) => {
     req.session.destroy()
-    res.end('Só vai')
+    res.redirect('/')
 })
 
 router.post('/login', (req, res) => {
@@ -53,6 +53,7 @@ router.post('/login', (req, res) => {
             console.log(`${user} logou`)
             req.session.logado = true
             req.session.userId = result
+            console.log(result)
             res.end('OK')
         } else {
             console.log(`Deu ruim`)
@@ -61,8 +62,6 @@ router.post('/login', (req, res) => {
             res.end('Fail')
         }
     })
-
-    // res.end(`${user} logou usando a ${pass}`)
 })
 
 router.get('/listAll', (req, res) => {
@@ -77,6 +76,88 @@ router.get('/listAll', (req, res) => {
         res.end(JSON.stringify(rows))
     })
 
+})
+
+router.delete('/person', (req, res) => {
+    res.setHeader('Content-Type', 'application/json')
+
+    try {
+        const personId = req.query.id
+        const userId = req.session.userId
+
+        if(personId === undefined || userId === undefined)  {
+            console.log('Erro no UserId ou PersonId')
+            res.end(JSON.stringify({ success: false}))
+        }
+
+        db.get(`SELECT * FROM contacts WHERE owner = ? AND id = ?`, [userId, personId], (err, row) => {
+
+            if (err) {
+                console.log('Erro')
+                res.end(JSON.stringify({ success: false }))
+            } else {        
+                if (personId == row.id) {
+                    db.run(`DELETE FROM contacts WHERE id = ?`, [personId], (err) => {
+                        if (err) {
+                           console.log('Erro, não apagou')                       
+                           res.end(JSON.stringify({ success: false }))
+                        } else {
+                            res.end(JSON.stringify({ success: true }))
+                        }
+                    })
+                } else {
+                    console.log('Erro')
+                    res.end(JSON.stringify({ success: false}))
+                }
+                
+            }
+        })
+    } catch (error) {
+        console.log(error)
+    }
+
+})
+
+router.put('/person', (req, res) => {
+    const person = req.body
+    const userId = req.session.userId
+    const personId = person.id
+    const personName = person.name
+    const personPhone = person.phone
+    const personAddress = person.address
+    const personEmail = person.email   
+
+    db.run(`UPDATE contacts SET name=?, phone=?, address=?, email=? WHERE id = ? AND owner = ?`, [personName, personPhone, personAddress, personEmail, personId, userId], (err) => {
+        res.setHeader('Content-Type', 'application/json')
+
+        if (err) {
+            console.log('Deu erro no update')
+            res.end(JSON.stringify({ success: false}))
+        } else {
+            res.end(JSON.stringify({ success: true}))
+        }
+    })
+})
+
+router.post('/person', (req, res) => {    
+    const person = req.body
+    const userId = req.session.userId
+    const personName = person.name
+    const personPhone = person.phone
+    const personAddress = person.address
+    const personEmail = person.email
+
+
+    res.setHeader('Content-Type', 'application/json')
+
+    db.run(`INSERT INTO contacts VALUES (null, ?, ?, ?, ?, ? )`, [personName, personPhone, personAddress, personEmail, userId], (err) => {
+        if (err) {
+            console.log('Erro')
+            res.end(JSON.stringify({ success: false}))
+        } else {
+            res.end(JSON.stringify({ success: true }))
+        }
+    })
 })
 
 async function login  (login, password) {
