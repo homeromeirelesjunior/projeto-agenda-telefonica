@@ -67,7 +67,7 @@ router.post('/login', (req, res) => {
 router.get('/listAll', (req, res) => {
     const userId = req.session.userId
 
-    db.all(`SELECT * FROM contacts WHERE owner = ?`, [userId], (err, rows) => {
+    db.all(`SELECT * FROM contacts WHERE owner = ? ORDER BY name ASC`, [userId], (err, rows) => {
         if (err) {
             console.log(err)
         }
@@ -75,7 +75,6 @@ router.get('/listAll', (req, res) => {
         res.setHeader('Content-Type', 'application/json')
         res.end(JSON.stringify(rows))
     })
-
 })
 
 router.delete('/person', (req, res) => {
@@ -90,8 +89,8 @@ router.delete('/person', (req, res) => {
             res.end(JSON.stringify({ success: false}))
         }
 
-        db.get(`SELECT * FROM contacts WHERE owner = ? AND id = ?`, [userId, personId], (err, row) => {
-
+        db.get(`SELECT * FROM contacts WHERE owner = ? AND id = ? ORDER BY name ASC`, [userId, personId], (err, row) => {
+           
             if (err) {
                 console.log('Erro')
                 res.end(JSON.stringify({ success: false }))
@@ -102,7 +101,7 @@ router.delete('/person', (req, res) => {
                            console.log('Erro, não apagou')                       
                            res.end(JSON.stringify({ success: false }))
                         } else {
-                            res.end(JSON.stringify({ success: true }))
+                           res.end(JSON.stringify({ success: true }))
                         }
                     })
                 } else {
@@ -147,10 +146,27 @@ router.post('/person', (req, res) => {
     const personAddress = person.address
     const personEmail = person.email
 
-
     res.setHeader('Content-Type', 'application/json')
 
     db.run(`INSERT INTO contacts VALUES (null, ?, ?, ?, ?, ? )`, [personName, personPhone, personAddress, personEmail, userId], (err) => {
+        if (err) {
+            console.log('Erro')
+            res.end(JSON.stringify({ success: false}))
+        } else {
+            res.end(JSON.stringify({ success: true }))
+        }
+    })
+})
+
+router.post('/user', (req, res) => {
+    const user = req.body.usuario
+    const password = req.body.senha
+
+    console.log(req.body)
+
+    res.setHeader('Content-Type', 'application/json')
+
+    db.run(`INSERT INTO users VALUES (null, ?, ?)`, [user, password], (err) => {
         if (err) {
             console.log('Erro')
             res.end(JSON.stringify({ success: false}))

@@ -8,14 +8,28 @@
     <link rel="stylesheet" type="text/css" href="/css/style.css">
     <link rel="stylesheet" type="text/css" href="/css/agenda.css">
 </head>
+
 <body>
 
 <div id="layout" class="x-borders">
-            <div id="breadcrumb">Agenda</div>
+            <div id="breadcrumb">
+                <div>
+                    Agenda
+                </div>
+                <div style="margin-left: auto; margin-right: 0; float: right">
+                    <button class="button" id="logout-btn">Logout</button>
+    
+                    <script type="text/javascript">
+                        document.getElementById("logout-btn").onclick = function () {
+                            location.href = "/logout"
+                        }
+                        </script>
+                </div>
+            </div>     
 
             <form class="add-form" action="" onsubmit="return false" method="post">
 
-                <div style="padding-bottom: 5px">
+                <div style="padding-bottom: 5px; padding-left: 10px;">
                     <input type="text" id="search" placeholder="Faça uma busca por Nome ou Telefone" autocomplete="off">
                     <label for="search">&#128270;</label>
                 </div>
@@ -55,6 +69,11 @@
 
 <script src="js/lib/jquery/jquery-2.1.3.js"></script>
 <script src="js/phone-book.js"></script>
+<script src="./dist/sweetalert2.all.min.js"></script>
+<script>    
+    
+    
+</script>
 
 </body>
 </html>

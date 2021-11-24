@@ -8,6 +8,15 @@
     <title>Bem vindo à sua Agenda Telefônica!!!</title>
     <script src="/js/lib/jquery/jquery-2.1.3.js"></script>
     <script>
+        
+        function showRegister() {
+            document.getElementById("register-form").style.display = 'block'
+        }
+
+        function hideRegister() {
+            document.getElementById("register-form").style.display = 'none'
+        }
+
         $(function () {
             $('#login').on('click', function (e) {
                 const user = $('#email').val()
@@ -21,6 +30,20 @@
                     }
                 })
             })
+       
+            $('#register').on('click', function (e) {
+                const user = $('#email-register').val()
+                const password = $('#password-register').val()
+
+                console.log(user, password)
+
+                $.post('/user', {usuario: user, senha: password}, function (data) {
+                    console.log(data)
+
+                    document.getElementById("register").style.display = 'none'
+                })
+                
+            })
         })
     </script>
 </head>
@@ -28,14 +51,24 @@
     <div class="login">
         <h1>Login Agenda Telefônica</h1>
         <form method="post" action="">
-            <p><input id="email" type="text" name="login" value="" placeholder="Email"></p>
+            <p><input id="email" type="text" name="login" value="" placeholder="Login"></p>
             <p><input id="password" type="password" name="password" value="" placeholder="Senha"></p>
-            <p class="submit"><button type="button" id="login">Entrar</button></p>          
+            <p class="button"><button type="button" class="login-btn" id="login">Entrar</button></p>
+            <p class="button"><button type="button" class="register-btn" id="to-register" onClick="showRegister()">Registrar</button></p>            
         </form>
     </div>
     
-    <div class="login-help">
+    <div class="login" id="register-form" style="display: none">
+        <h1>Registro de novo usuário</h1>
+        <form method="post" action="">
+            <p><input id="email-register" type="text" name="login" value="" placeholder="Escolha seu login"></p>
+            <p><input id="password-register" type="password" name="password" value="" placeholder="Escolha sua senha"></p>
+            <p class="button"><button type="button" class="login-btn" id="register">OK</button></p>
+            <p class="button"><button type="button" class="register-btn" id="cancel-register" onClick="hideRegister()">Cancelar</button></p>            
+        </form>
+    </div>
+    <!-- <div class="login-help">
         <p>Esqueceu sua senha? <a href="#">Clique aqui para recuperá-la</a>.</p>
-    </div>  
+    </div>   -->
 </body>
 </html>

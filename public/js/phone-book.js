@@ -40,14 +40,35 @@ window.PhoneBook = {
     },
 
     delete: function(id) {
-        $.ajax({
-            url: API.DELETE + `?id=${id}`,
-            method: ACTION_METHODS.DELETE
-        }).done(function (response) {
-            if (response.success) {
-                PhoneBookLocalActions.delete(id);
-            }
-        });
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+          }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: API.DELETE + `?id=${id}`,
+                    method: ACTION_METHODS.DELETE
+                }).done(function (response) {
+                    if (response.success) {
+                        Swal.fire(
+                            'Deleted!',
+                            'Your file has been deleted.',
+                            'success'
+                        )
+                        PhoneBookLocalActions.delete(id);
+                        PhoneBook.load();
+                    }
+                });
+            }         
+
+          })
+
+
     },
 
     add: function(person) {
@@ -59,6 +80,7 @@ window.PhoneBook = {
             if (response.success) {
                 PhoneBook.cancelEdit();
                 PhoneBookLocalActions.add(person);
+                PhoneBook.load();
             }
         });
     },
@@ -72,6 +94,7 @@ window.PhoneBook = {
             if (response.success) {
                 PhoneBook.cancelEdit();
                 PhoneBookLocalActions.update(person);
+                PhoneBook.load();
             }
         });
     },
@@ -179,6 +202,5 @@ window.PhoneBookLocalActions = {
     }
 }
 
-console.info('loading persons');
 PhoneBook.load();
 PhoneBook.bindEvents();
