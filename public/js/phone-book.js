@@ -41,13 +41,14 @@ window.PhoneBook = {
 
     delete: function(id) {
         Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
+            title: 'Tem certeza?',
+            text: "Não será possível reverter essa ação!",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
+            cancelButtonText: 'Cancelar!',
+            confirmButtonText: 'Sim! Deletar contato!'
           }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
@@ -56,8 +57,8 @@ window.PhoneBook = {
                 }).done(function (response) {
                     if (response.success) {
                         Swal.fire(
-                            'Deleted!',
-                            'Your file has been deleted.',
+                            'Excluido!',
+                            'Seu contato foi excluido.',
                             'success'
                         )
                         PhoneBookLocalActions.delete(id);

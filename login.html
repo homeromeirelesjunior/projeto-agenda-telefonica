@@ -40,7 +40,12 @@
                 $.post('/user', {usuario: user, senha: password}, function (data) {
                     console.log(data)
 
-                    document.getElementById("register").style.display = 'none'
+                    document.getElementById("register-form").style.display = 'none'
+
+                    Swal.fire(
+                        'Registro efetuado com sucesso!',
+                        'Efetue o login para utilizar sua agenda!'
+                    )
                 })
                 
             })
@@ -70,5 +75,6 @@
     <!-- <div class="login-help">
         <p>Esqueceu sua senha? <a href="#">Clique aqui para recuperá-la</a>.</p>
     </div>   -->
+    <script src="./dist/sweetalert2.all.min.js"></script>
 </body>
 </html>

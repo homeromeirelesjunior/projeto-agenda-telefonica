@@ -16,6 +16,9 @@
                 <div>
                     Agenda
                 </div>
+                <div>
+                    <span id="user"></span>
+                </div>
                 <div style="margin-left: auto; margin-right: 0; float: right">
                     <button class="button" id="logout-btn">Logout</button>
     
@@ -23,7 +26,7 @@
                         document.getElementById("logout-btn").onclick = function () {
                             location.href = "/logout"
                         }
-                        </script>
+                    </script>
                 </div>
             </div>     
 
@@ -70,10 +73,15 @@
 <script src="js/lib/jquery/jquery-2.1.3.js"></script>
 <script src="js/phone-book.js"></script>
 <script src="./dist/sweetalert2.all.min.js"></script>
-<script>    
-    
-    
-</script>
+
+<!-- <script>
+
+    $(document).ready(function(){
+        var userName = sess.usuario
+
+       $('#user').html(`Seja bem vindo, ${userName}`);
+    });
+ </script> -->
 
 </body>
 </html>
